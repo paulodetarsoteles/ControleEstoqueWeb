@@ -19,55 +19,69 @@
                 @Html.ActionLink("Controle de Estoque", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Cadastros<span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Produto", "Produto", "Cadastro")</li>
-                            <li>@Html.ActionLink("Marca", "MarcaProduto", "Cadastro")</li>
-                            <li>@Html.ActionLink("Grupo de Produto", "GrupoProduto", "Cadastro")</li>
-                            <li>@Html.ActionLink("Local", "LocalProduto", "Cadastro")</li>
-                            <li>@Html.ActionLink("Fornecedor", "Fornecedor", "Cadastro")</li>
-                            <li class="nav-divider"></li>
-                            <li>@Html.ActionLink("Usuário", "Usuario", "Cadastro")</li>
-                            <li>@Html.ActionLink("Perfil", "PerfilUsuario", "Cadastro")</li>
+                @if (Request.IsAuthenticated)
+                {
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Cadastros<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Produto", "Produto", "Cadastro")</li>
+                                <li>@Html.ActionLink("Marca", "MarcaProduto", "Cadastro")</li>
+                                <li>@Html.ActionLink("Grupo de Produto", "GrupoProduto", "Cadastro")</li>
+                                <li>@Html.ActionLink("Local", "LocalProduto", "Cadastro")</li>
+                                <li>@Html.ActionLink("Fornecedor", "Fornecedor", "Cadastro")</li>
+                                <li class="nav-divider"></li>
+                                <li>@Html.ActionLink("Usuário", "Usuario", "Cadastro")</li>
+                                <li>@Html.ActionLink("Perfil", "PerfilUsuario", "Cadastro")</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Operações<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Entrada de Produtos", "Entrada", "Operacao")</li>
+                                <li>@Html.ActionLink("Saída de Produtos", "Saida", "Operacao")</li>
+                                <li>@Html.ActionLink("Perda de Produtos", "Perda", "Operacao")</li>
+                                <li>@Html.ActionLink("Inventário de Estoque", "Inventario", "Operacao")</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Relatórios<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Posição do Estoque", "PosicaoEstoque", "Relatorio")</li>
+                                <li>@Html.ActionLink("Ressuprimento", "Ressuprimento", "Relatorio")</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Gráficos<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Perda Por Mês", "PerdaMes", "Grafico")</li>
+                                <li>@Html.ActionLink("Entrada x Saída p/ Mês", "EntradaSaidaMes", "Grafico")</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    using (Html.BeginForm("Logoff", "Conta", FormMethod.Post, new { id = "logoffForm" }))
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Sobre", "Sobre", "Home")</li>
+                            <li><a href="#">Olá @User.Identity.Name</a></li>
+                            <li><a href="javascript:document.getElementById('logoffForm').submit()">Sair</a></li>
                         </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Operações<span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Entrada de Produtos", "Entrada", "Operacao")</li>
-                            <li>@Html.ActionLink("Saída de Produtos", "Saida", "Operacao")</li>
-                            <li>@Html.ActionLink("Perda de Produtos", "Perda", "Operacao")</li>
-                            <li>@Html.ActionLink("Inventário de Estoque", "Inventario", "Operacao")</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Relatórios<span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Posição do Estoque", "PosicaoEstoque", "Relatorio")</li>
-                            <li>@Html.ActionLink("Ressuprimento", "Ressuprimento", "Relatorio")</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Gráficos<span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Perda Por Mês", "PerdaMes", "Grafico")</li>
-                            <li>@Html.ActionLink("Entrada x Saída p/ Mês", "EntradaSaidaMes", "Grafico")</li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Sobre", "Sobre", "Home")</li>
-                </ul>
+                    }
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Login", "Login", "Conta")</li>
+                    </ul>
+                }
             </div>
         </div>
     </div>

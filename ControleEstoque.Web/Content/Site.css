@@ -28,3 +28,12 @@ textarea {
     background-color: #777;
     border-color: #fff
 }
+
+.container-login{
+    width: 400px; 
+    margin: auto; 
+}
+
+.titulo{
+    margin-bottom: 30px; 
+}
