@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ControleEstoque.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,13 @@ namespace ControleEstoque.Web.Controllers
 {
     public class CadastroController : Controller
     {
+        private static List<GrupoProdutoModel> _listaGrupoProduto = new List<GrupoProdutoModel>
+        {
+            new GrupoProdutoModel() {Id = 1, Nome = "Livros", Ativo = true}, 
+            new GrupoProdutoModel() {Id = 2, Nome = "Instrumentos", Ativo = true}, 
+            new GrupoProdutoModel() {Id = 3, Nome = "Camisas", Ativo = false}
+        }; 
+
         [Authorize]
         public ActionResult Produto()
         {
@@ -23,7 +31,14 @@ namespace ControleEstoque.Web.Controllers
         [Authorize]
         public ActionResult GrupoProduto()
         {
-            return View();
+            return View(_listaGrupoProduto);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult RecuperarGrupoProduto(int id)
+        {
+            return Json(_listaGrupoProduto.Find(x => x.Id == id)); 
         }
 
         [Authorize]

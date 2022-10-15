@@ -37,3 +37,7 @@ textarea {
 .titulo{
     margin-bottom: 30px; 
 }
+
+.invisivel{
+    display: none; 
+}
