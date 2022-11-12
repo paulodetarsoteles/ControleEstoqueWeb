@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ControleEstoque.Web.Models
 {
@@ -13,8 +9,8 @@ namespace ControleEstoque.Web.Models
         public string Usuario { get; set; }
 
         [Required(ErrorMessage = "Senha obrigatória")]
-        [DataType(DataType.Password)]
         [Display(Name = "Senha: ")]
+        [DataType(DataType.Password)]
         public string Senha { get; set; }
 
         public bool Esqueci { get; set; }

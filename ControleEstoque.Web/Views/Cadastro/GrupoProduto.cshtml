@@ -73,6 +73,7 @@
 
 @Html.Hidden("id_cadastro")
 <div id="modal_cadastro" class="form-horizontal invisivel" role="dialog">
+    <div id="msg_mensagem_aviso" class="text-danger invisivel"></div>
     <fieldset>
         <div class="row">
             <div class="form-group">
@@ -95,6 +96,8 @@
                         <a id="btn_sair" class="btn btn-default" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Sair</a>
                         <a id="btn_confirmar" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-ok"></i> Salvar</a>
                     </div>
+                    <div id="msg_aviso" class="alert alert-warning invisivel">Falta preencher os campos acima!</div>
+                    <div id="msg_erro" class="alert alert-danger invisivel">Ops, ocorreu uma falha inesperada!</div>
                 </div>
             </div>
         </div>
@@ -109,6 +112,12 @@
             $('#txt_nome').val(dados.Nome);
             $('#cbx_ativo').prop('checked', dados.Ativo);
             var modal_cadastro = $('#modal_cadastro');
+
+            $('#msg_mensagem_aviso').empty();
+            $('#msg_mensagem_aviso').hide();
+            $('#msg_aviso').hide();
+            $('#msg_erro').hide();
+
             bootbox.dialog({
                 title: '@ViewBag.Title',
                 message: modal_cadastro
@@ -121,6 +130,16 @@
             .on('hidden.bs.modal', function () {
                 modal_cadastro.hide().appendTo('body');
             });
+        }
+
+        function formatar_mensagem_aviso(mensagens) {
+            var ret = '';
+
+            for (var i = 0; i < mensagens.length; i++) {
+                ret += '<li>' + mensagens[i] + '</li>';
+            }
+
+            return '<ul>' + ret + '</ul>';
         }
 
         function criar_linha_grid(dados) {
@@ -139,6 +158,7 @@
         $(document).on('click', '#btn_incluir', function () {
             abrir_form({ Id: 0, Nome: '', Ativo: true });
         })
+
         .on('click', '.btn-alterar', function () {
             var btn = $(this),
                 id = btn.closest('tr').attr('data-id'),
@@ -150,6 +170,7 @@
                 }
             });
         })
+
         .on('click', '.btn-excluir', function () {
             var btn = $(this),
                 tr = btn.closest('tr'),
@@ -179,6 +200,7 @@
                 }
             });
         })
+
         .on('click', '#btn_confirmar', function () {
             var btn = $(this),
                 url = '@Url.Action("SalvarGrupoProduto", "Cadastro")',
@@ -188,10 +210,11 @@
                     Ativo: $('#cbx_ativo').prop('checked')
                 };
             $.post(url, param, function (response) {
-                if (response) {
+                if (response.Resultado == "Ok") {
                     if (param.Id == 0) {
+                        param.Id = response.IdSalvo;
                         var table = $('#grid_cadastro').find('tbody'),
-                            linha = criar_linha_grid(response);
+                            linha = criar_linha_grid(param);
                         table.append(linha);
                     }
                     else {
@@ -201,6 +224,17 @@
                             .eq(1).html(param.Ativo ? 'SIM' : 'NÃO');
                     }
                     $('#modal_cadastro').parents('.bootbox').modal('hide');
+                }
+                else if (response.Resultado == "Erro") {
+                    $('#msg_aviso').hide(); 
+                    $('#msg_mensagem_aviso').hide(); 
+                    $('#msg_erro').show(); 
+                }
+                else if (response.Resultado == "Aviso") {
+                    $('#msg_erro').hide(); 
+                    $('#msg_mensagem_aviso').html(formatar_mensagem_aviso(response.Mensagens));
+                    $('#msg_aviso').show();
+                    $('#msg_mensagem_aviso').show();
                 }
             });
         });

@@ -11,10 +11,10 @@ namespace ControleEstoque.Web.Controllers
     {
         private static List<GrupoProdutoModel> _listaGrupoProduto = new List<GrupoProdutoModel>
         {
-            new GrupoProdutoModel() {Id = 1, Nome = "Livros", Ativo = true}, 
-            new GrupoProdutoModel() {Id = 2, Nome = "Instrumentos", Ativo = true}, 
+            new GrupoProdutoModel() {Id = 1, Nome = "Livros", Ativo = true},
+            new GrupoProdutoModel() {Id = 2, Nome = "Instrumentos", Ativo = true},
             new GrupoProdutoModel() {Id = 3, Nome = "Camisas", Ativo = false}
-        }; 
+        };
 
         [Authorize]
         public ActionResult Produto()
@@ -38,28 +38,49 @@ namespace ControleEstoque.Web.Controllers
         [Authorize]
         public ActionResult RecuperarGrupoProduto(int id)
         {
-            return Json(_listaGrupoProduto.Find(x => x.Id == id)); 
+            return Json(_listaGrupoProduto.Find(x => x.Id == id));
         }
 
         [HttpPost]
         [Authorize]
         public ActionResult SalvarGrupoProduto(GrupoProdutoModel model)
         {
-            var registroBD = _listaGrupoProduto.Find(x => x.Id == model.Id); 
+            string resultado = "Ok";
+            string idSalvo = string.Empty;
+            List<string> mensagens = new List<string>();
 
-            if(registroBD == null)
+            if (!ModelState.IsValid)
             {
-                registroBD = model; 
-                registroBD.Id = _listaGrupoProduto.Max(x => x.Id) + 1;
-                _listaGrupoProduto.Add(registroBD);
+                resultado = "Aviso";
+                mensagens = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList(); 
             }
             else
             {
-                registroBD.Nome = model.Nome;
-                registroBD.Ativo = model.Ativo; 
+                try
+                {
+                    var registroBD = _listaGrupoProduto.Find(x => x.Id == model.Id);
+
+                    if (registroBD == null)
+                    {
+                        registroBD = model;
+                        registroBD.Id = _listaGrupoProduto.Max(x => x.Id) + 1;
+                        _listaGrupoProduto.Add(registroBD);
+                    }
+                    else
+                    {
+                        registroBD.Nome = model.Nome;
+                        registroBD.Ativo = model.Ativo;
+                    }
+                }
+                catch (Exception)
+                {
+                    resultado = "Erro"; 
+                    throw new Exception(resultado);
+                }
             }
 
-            return Json(registroBD); 
+            //Vai ser retornado aqui um objeto anônimo
+            return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo});
         }
 
         [HttpPost]
@@ -68,12 +89,12 @@ namespace ControleEstoque.Web.Controllers
         {
             var ret = false;
             var registroBD = _listaGrupoProduto.Find(x => x.Id == id);
-            if(registroBD != null)
+            if (registroBD != null)
             {
-                _listaGrupoProduto.Remove(registroBD); 
+                _listaGrupoProduto.Remove(registroBD);
                 ret = true;
             }
-            return Json(ret); 
+            return Json(ret);
         }
 
         [Authorize]
