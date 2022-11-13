@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Configuration;
+using System.Data.SqlClient;
 
 namespace ControleEstoque.Web.Models
 {
@@ -9,7 +10,7 @@ namespace ControleEstoque.Web.Models
             var ret = false; 
             using (var conexao = new SqlConnection())
             {
-                conexao.ConnectionString = @"Password=12345678;User ID=sa;Database=ControleEstoqueDb;Data Source=DESKTOP-JVF2A0R\SQLEXPRESS";
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
                 conexao.Open(); 
                 using (var comando = new SqlCommand())
                 {
