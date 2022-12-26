@@ -7,9 +7,14 @@ namespace ControleEstoque.Web.Models
 {
     public class UsuarioModel
     {
-        public static bool Validar(string login, string senha)
+        public int Id { get; set; }
+        public string Login { get; set; }
+        public string Senha { get; set; }
+        public string Nome { get; set; }
+
+        public static UsuarioModel Validar(string login, string senha)
         {
-            var ret = false; 
+            UsuarioModel ret = null; 
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -17,10 +22,21 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT COUNT(*) FROM usuario WHERE login=@login AND senha=@senha";
+                    comando.CommandText = "SELECT * FROM usuario WHERE login=@login AND senha=@senha";
                     comando.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
                     comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(senha);
-                    ret = ((int)comando.ExecuteScalar() > 0); 
+                    var reader = comando.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        ret = new UsuarioModel
+                        {
+                            Id = (int)reader["id"],
+                            Login = (string)reader["login"],
+                            Senha = (string)reader["senha"],
+                            Nome = (string)reader["nome"]
+                        }; 
+                    }
                 }
             }
             return ret; 

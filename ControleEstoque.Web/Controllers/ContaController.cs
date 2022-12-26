@@ -24,11 +24,11 @@ namespace ControleEstoque.Web.Controllers
         {
             if (!ModelState.IsValid) return View(login);
 
-            var achou = UsuarioModel.Validar(login.Usuario, login.Senha);
+            var usuario = UsuarioModel.Validar(login.Usuario, login.Senha);
 
-            if (achou)
+            if (usuario != null)
             {
-                FormsAuthentication.SetAuthCookie(login.Usuario, login.Esqueci);
+                FormsAuthentication.SetAuthCookie(usuario.Nome, login.Esqueci);
                 if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
                 else return RedirectToAction("Index", "Home");
             }
