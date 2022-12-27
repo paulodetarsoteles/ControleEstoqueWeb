@@ -39,6 +39,7 @@ namespace ControleEstoque.Web.Models
                         });
                     }
                 }
+                conexao.Close(); 
             }
             return ret;
         }
@@ -69,6 +70,7 @@ namespace ControleEstoque.Web.Models
                         };
                     }
                 }
+                conexao.Close();
             }
             return ret;
         }
@@ -105,6 +107,7 @@ namespace ControleEstoque.Web.Models
                         if(comando.ExecuteNonQuery() > 0) ret = this.Id;
                     }
                 }
+                conexao.Close();
             }
             return ret;
         }
@@ -127,6 +130,7 @@ namespace ControleEstoque.Web.Models
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = id; 
                         ret = (comando.ExecuteNonQuery()) > 0;
                     }
+                    conexao.Close();
                 }
             }
             return ret;
