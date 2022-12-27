@@ -15,6 +15,7 @@ namespace ControleEstoque.Web.Models
 
         public bool Ativo { get; set; }
 
+        #region Recuperar Lista de Todos os Grupos de Produtos
         public static List<GrupoProdutoModel> RecuperarLista()
         {
             var ret = new List<GrupoProdutoModel>();
@@ -41,7 +42,9 @@ namespace ControleEstoque.Web.Models
             }
             return ret;
         }
+        #endregion
 
+        #region Recuperar Grupo de Produto Pelo ID
         public static GrupoProdutoModel RecuperarPeloId(int id)
         {
             GrupoProdutoModel ret = null;
@@ -69,7 +72,9 @@ namespace ControleEstoque.Web.Models
             }
             return ret;
         }
+        #endregion
 
+        #region Salvar o Grupo de Produto
         public int Salvar()
         {
             int ret = 0;
@@ -103,7 +108,9 @@ namespace ControleEstoque.Web.Models
             }
             return ret;
         }
+        #endregion
 
+        #region Excluir Grupo de Produto
         public static bool ExcluirPeloId(int id)
         {
             bool ret = false;
@@ -124,5 +131,6 @@ namespace ControleEstoque.Web.Models
             }
             return ret;
         }
+        #endregion
     }
 }

@@ -5,6 +5,7 @@ namespace ControleEstoque.Web.Helpers
 {
     public static class CriptoHelper
     {
+        //Criptografia da senha do usuário
         public static string HashMD5(string val)
         {
             var bytes = Encoding.ASCII.GetBytes(val);

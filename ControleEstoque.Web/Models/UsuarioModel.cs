@@ -12,6 +12,7 @@ namespace ControleEstoque.Web.Models
         public string Senha { get; set; }
         public string Nome { get; set; }
 
+        #region Validar Login do Usuário
         public static UsuarioModel Validar(string login, string senha)
         {
             UsuarioModel ret = null; 
@@ -41,5 +42,6 @@ namespace ControleEstoque.Web.Models
             }
             return ret; 
         }
+        #endregion
     }
 }

@@ -21,6 +21,8 @@ namespace ControleEstoque.Web.Controllers
             return View();
         }
 
+        #region Grupo de Produtos
+
         [Authorize]
         public ActionResult GrupoProduto()
         {
@@ -56,14 +58,11 @@ namespace ControleEstoque.Web.Controllers
                     int id = model.Salvar();
 
                     if (id > 0) idSalvo = id.ToString(); 
-                    else
-                    {
-                        resultado = "Erro"; 
-                    }
+                    else resultado = "Erro"; 
                 }
                 catch (Exception)
                 {
-                    resultado = "Erro"; 
+                    resultado = "Erro ao salvar"; 
                     throw new Exception(resultado);
                 }
             }
@@ -79,6 +78,8 @@ namespace ControleEstoque.Web.Controllers
         {
             return Json(GrupoProdutoModel.ExcluirPeloId(id));
         }
+
+        #endregion
 
         [Authorize]
         public ActionResult LocalProduto()
