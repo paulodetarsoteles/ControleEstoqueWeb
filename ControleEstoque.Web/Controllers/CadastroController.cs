@@ -9,7 +9,9 @@ namespace ControleEstoque.Web.Controllers
 {
     public class CadastroController : Controller
     {
-        private const string _senhapadrao = "1q2w3e4r"; 
+        private const string _senhapadrao = "1q2w3e4r";
+
+        #region Produto
 
         [Authorize]
         public ActionResult Produto()
@@ -17,18 +19,31 @@ namespace ControleEstoque.Web.Controllers
             return View();
         }
 
+        #endregion
+
+        #region Marca Produto
+
         [Authorize]
         public ActionResult MarcaProduto()
         {
             return View();
         }
 
+        #endregion
+
         #region Grupo de Produtos
 
         [Authorize]
         public ActionResult GrupoProduto()
         {
-            return View(GrupoProdutoModel.RecuperarLista());
+            List<GrupoProdutoModel> listaGrupoProduto = GrupoProdutoModel.RecuperarLista();
+
+            ViewBag.PagAtual = 1; 
+            ViewBag.QtdeLinhasPorPagina = 10;
+            int restoPaginas = listaGrupoProduto.Count % ViewBag.QtdeLinhasPorPagina > 0 ? 1 : 0;
+            ViewBag.QtdePaginas = listaGrupoProduto.Count / ViewBag.QtdeLinhasPorPagina + restoPaginas;
+
+            return View(listaGrupoProduto);
         }
 
         [HttpPost]
@@ -83,17 +98,25 @@ namespace ControleEstoque.Web.Controllers
 
         #endregion
 
+        #region LocalProduto
+
         [Authorize]
         public ActionResult LocalProduto()
         {
             return View();
         }
 
+        #endregion
+
+        #region Fornecedor
+
         [Authorize]
         public ActionResult Fornecedor()
         {
             return View();
         }
+
+        #endregion
 
         #region Usuarios
 
@@ -158,10 +181,14 @@ namespace ControleEstoque.Web.Controllers
 
         #endregion
 
+        #region PerfilUsuario
+
         [Authorize]
         public ActionResult PerfilUsuario()
         {
             return View();
         }
+
+        #endregion
     }
 }

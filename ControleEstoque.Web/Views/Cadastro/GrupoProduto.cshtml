@@ -53,21 +53,48 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr data-id="@item.Id">
-                                <td>@item.Nome</td>
-                                <td>@{var ativo = (item.Ativo ? "SIM" : "NÃO");}@ativo</td>
-                                <td>
-                                    <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
-                                    <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
-                                </td>
-                            </tr>
+                        @{
+                            int linha = 0;
+                            foreach (var item in Model)
+                            {
+                                linha++;
+                                if (linha <= ViewBag.QtdeLinhasPorPagina)
+                                {
+                                    <tr data-id="@item.Id">
+                                        <td>@item.Nome</td>
+                                        <td>@{var ativo = (item.Ativo ? "SIM" : "NÃO");}@ativo</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
+                                            <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
                         }
                     </tbody>
                 </table>
             </div>
         </div>
+        @if (ViewBag.QtdePaginas > 1)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            @for (var i = 2; i <= ViewBag.QtdePaginas; i++)
+                            {
+                                <li class="page-item"><a class="page-link" href="#">@i</a></li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        }
     </section>
 </div>
 
@@ -109,8 +136,8 @@
     <script>
 
         function add_anti_forgery_token(data) {
-            data.__RequestVerificationToken = $('[name = __RequestVerificationToken]').val(); 
-            return data; 
+            data.__RequestVerificationToken = $('[name = __RequestVerificationToken]').val();
+            return data;
         }
 
         function abrir_form(dados) {
@@ -232,12 +259,12 @@
                     $('#modal_cadastro').parents('.bootbox').modal('hide');
                 }
                 else if (response.Resultado == "Erro") {
-                    $('#msg_aviso').hide(); 
-                    $('#msg_mensagem_aviso').hide(); 
-                    $('#msg_erro').show(); 
+                    $('#msg_aviso').hide();
+                    $('#msg_mensagem_aviso').hide();
+                    $('#msg_erro').show();
                 }
                 else if (response.Resultado == "Aviso") {
-                    $('#msg_erro').hide(); 
+                    $('#msg_erro').hide();
                     $('#msg_mensagem_aviso').html(formatar_mensagem_aviso(response.Mensagens));
                     $('#msg_aviso').show();
                     $('#msg_mensagem_aviso').show();
