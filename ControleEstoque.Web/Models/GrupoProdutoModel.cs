@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
@@ -15,23 +16,52 @@ namespace ControleEstoque.Web.Models
 
         public bool Ativo { get; set; }
 
-        #region Recuperar Lista de Todos os Grupos de Produtos
-        public static List<GrupoProdutoModel> RecuperarLista()
+        #region Retorna a Quantidade de Grupos
+        public static int RecuperarQuantidade()
         {
-            var ret = new List<GrupoProdutoModel>();
+            int retorno = 0;
+
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
                 conexao.Open();
+
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT * FROM grupo_produto ORDER BY nome";
+                    comando.CommandText = "SELECT COUNT(*) FROM grupo_produto";
+                    retorno = (int)comando.ExecuteScalar();
+                }
+                conexao.Close();
+            }
+            return retorno;
+        }
+        #endregion
+
+        #region Recupera a Lista de Grupos
+        public static List<GrupoProdutoModel> RecuperarLista(int pagina, int tamPagina)
+        {
+            List<GrupoProdutoModel> retorno = new List<GrupoProdutoModel>();
+
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
+                conexao.Open();
+
+                using (var comando = new SqlCommand())
+                {
+                    int posicao = (pagina - 1) * tamPagina;
+
+                    comando.Connection = conexao;
+                    comando.CommandText = string.Format(
+                        "SELECT * FROM grupo_produto ORDER BY nome OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY",
+                        posicao > 0 ? posicao - 1 : 0, tamPagina);
+
                     var reader = comando.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        ret.Add(new GrupoProdutoModel()
+                        retorno.Add(new GrupoProdutoModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
@@ -39,16 +69,16 @@ namespace ControleEstoque.Web.Models
                         });
                     }
                 }
-                conexao.Close(); 
+                conexao.Close();
             }
-            return ret;
+            return retorno;
         }
         #endregion
 
-        #region Recuperar Grupo de Produto Pelo ID
+        #region Recupera o Grupo Pelo ID
         public static GrupoProdutoModel RecuperarPeloId(int id)
         {
-            GrupoProdutoModel ret = null;
+            GrupoProdutoModel retorno = null;
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -62,7 +92,7 @@ namespace ControleEstoque.Web.Models
 
                     if (reader.Read())
                     {
-                        ret = new GrupoProdutoModel()
+                        retorno = new GrupoProdutoModel()
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
@@ -72,14 +102,14 @@ namespace ControleEstoque.Web.Models
                 }
                 conexao.Close();
             }
-            return ret;
+            return retorno;
         }
         #endregion
 
         #region Salvar o Grupo de Produto
         public int Salvar()
         {
-            int ret = 0;
+            int retorno = 0;
             var model = RecuperarPeloId(this.Id);
 
             using (var conexao = new SqlConnection())
@@ -96,7 +126,7 @@ namespace ControleEstoque.Web.Models
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0);
                         
-                        ret = (int)comando.ExecuteScalar();
+                        retorno = (int)comando.ExecuteScalar();
                     }
                     else
                     {
@@ -104,19 +134,19 @@ namespace ControleEstoque.Web.Models
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0); 
-                        if(comando.ExecuteNonQuery() > 0) ret = this.Id;
+                        if(comando.ExecuteNonQuery() > 0) retorno = this.Id;
                     }
                 }
                 conexao.Close();
             }
-            return ret;
+            return retorno;
         }
         #endregion
 
         #region Excluir Grupo de Produto
         public static bool ExcluirPeloId(int id)
         {
-            bool ret = false;
+            bool retorno = false;
             if (RecuperarPeloId(id) != null)
             {
                 using (var conexao = new SqlConnection())
@@ -128,12 +158,12 @@ namespace ControleEstoque.Web.Models
                         comando.Connection = conexao;
                         comando.CommandText = "DELETE FROM grupo_produto WHERE (id = @id)";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = id; 
-                        ret = (comando.ExecuteNonQuery()) > 0;
+                        retorno = (comando.ExecuteNonQuery()) > 0;
                     }
                     conexao.Close();
                 }
             }
-            return ret;
+            return retorno;
         }
         #endregion
     }
