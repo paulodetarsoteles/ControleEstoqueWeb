@@ -120,12 +120,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\CadastroController.cs" />
-    <Compile Include="Controllers\ContaController.cs" />
-    <Compile Include="Controllers\GraficoController.cs" />
+    <Compile Include="Controllers\Cadastro\CadastroGrupoProdutoController.cs" />
+    <Compile Include="Controllers\Cadastro\CadastroUsuarioController.cs" />
+    <Compile Include="Controllers\Conta\ContaController.cs" />
+    <Compile Include="Controllers\Grafico\GraficoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\OperacaoController.cs" />
-    <Compile Include="Controllers\RelatorioController.cs" />
+    <Compile Include="Controllers\Operacao\OperacaoController.cs" />
+    <Compile Include="Controllers\Relatorio\RelatorioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -136,6 +137,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-select.css" />
+    <Content Include="Content\bootstrap-select.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -144,6 +147,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap-select.js" />
+    <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\_refenrences.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -174,10 +179,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Cadastro\Produto.cshtml" />
     <Content Include="Views\Cadastro\MarcaProduto.cshtml" />
-    <Content Include="Views\Cadastro\GrupoProduto.cshtml" />
+    <Content Include="Views\CadastroGrupoProduto\Index.cshtml" />
     <Content Include="Views\Cadastro\LocalProduto.cshtml" />
     <Content Include="Views\Cadastro\Fornecedor.cshtml" />
-    <Content Include="Views\Cadastro\Usuario.cshtml" />
+    <Content Include="Views\CadastroUsuario\Index.cshtml" />
     <Content Include="Views\Cadastro\PerfilUsuario.cshtml" />
     <Content Include="Views\Operacao\Entrada.cshtml" />
     <Content Include="Views\Operacao\Saida.cshtml" />
@@ -191,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Usuario\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
