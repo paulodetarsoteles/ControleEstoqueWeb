@@ -121,6 +121,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\Cadastro\CadastroGrupoProdutoController.cs" />
+    <Compile Include="Controllers\Cadastro\CadastroUnidadeMedidaController.cs" />
     <Compile Include="Controllers\Cadastro\CadastroUsuarioController.cs" />
     <Compile Include="Controllers\Conta\ContaController.cs" />
     <Compile Include="Controllers\Grafico\GraficoController.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Helpers\CriptoHelper.cs" />
     <Compile Include="Models\GrupoProdutoModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\UnidadeMedidaModel.cs" />
     <Compile Include="Models\UsuarioModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -144,6 +146,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Cadastro\GrupoProduto.css" />
+    <Content Include="Content\Cadastro\UnidadeMedida.css" />
     <Content Include="Content\Cadastro\Usuario.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -152,6 +155,7 @@
     <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\Cadastro\CadastroBase.js" />
+    <Content Include="Scripts\Cadastro\UnidadeMedida.js" />
     <Content Include="Scripts\Cadastro\GrupoProduto.js" />
     <Content Include="Scripts\Cadastro\Usuario.js" />
     <Content Include="Scripts\_refenrences.js" />
@@ -199,6 +203,7 @@
     <Content Include="Views\Grafico\EntradaSaidaMes.cshtml" />
     <Content Include="Views\Conta\Login.cshtml" />
     <Content Include="Views\Shared\_Cadastro.cshtml" />
+    <Content Include="Views\CadastroUnidadeMedida\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
