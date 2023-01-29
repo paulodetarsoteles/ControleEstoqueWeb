@@ -31,7 +31,7 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT * FROM usuario WHERE login=@login AND senha=@senha";
+                    comando.CommandText = "SELECT * FROM usuario WHERE login = @login AND senha = @senha";
                     comando.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
                     comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(senha);
                     var reader = comando.ExecuteReader();
@@ -52,8 +52,30 @@ namespace ControleEstoque.Web.Models
         }
         #endregion
 
+        #region Retorna a Quantidade de Usuarios
+        public static int RecuperarQuantidade()
+        {
+            int retorno = 0;
+
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
+                conexao.Open();
+
+                using (var comando = new SqlCommand())
+                {
+                    comando.Connection = conexao;
+                    comando.CommandText = "SELECT COUNT(*) FROM usuario";
+                    retorno = (int)comando.ExecuteScalar();
+                }
+                conexao.Close();
+            }
+            return retorno;
+        }
+        #endregion
+
         #region Recuperar Lista de Todos os Usuários
-        public static List<UsuarioModel> RecuperarLista()
+        public static List<UsuarioModel> RecuperarLista(int pagina, int tamPagina)
         {
             var ret = new List<UsuarioModel>();
             using(var conexao = new SqlConnection())
@@ -62,17 +84,23 @@ namespace ControleEstoque.Web.Models
                 conexao.Open();
                 using(var comando = new SqlCommand())
                 {
-                    comando.Connection = conexao;
-                    comando.CommandText = "SELECT * FROM usuario ORDER BY nome";
-                    var reader = comando.ExecuteReader();
+                    int posicao = (pagina - 1) * tamPagina;
 
+                    comando.Connection = conexao;
+                    comando.CommandText = string.Format(
+                        "SELECT * FROM usuario ORDER BY nome OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY",
+                        posicao > 0 ? posicao - 1 : 0, tamPagina);
+
+                    var reader = comando.ExecuteReader();
+                    
                     while (reader.Read())
                     {
                         ret.Add(new UsuarioModel
                         {
                             Id = (int)reader["id"],
                             Login = (string)reader["login"], 
-                            Nome = (string)reader["nome"]
+                            Nome = (string)reader["nome"], 
+                            Senha = (string)reader["senha"]
                         }); 
                     }
                 }

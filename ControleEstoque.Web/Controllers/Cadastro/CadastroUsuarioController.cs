@@ -4,17 +4,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace ControleEstoque.Web.Controllers.Cadastro
+namespace ControleEstoque.Web.Controllers
 {
     public class CadastroUsuarioController : Controller
     {
+        private const int _quantMaxLinhasPorPagina = 10; 
         private const string _senhapadrao = "1q2w3e4r";
 
         [Authorize]
         public ActionResult Index()
         {
             ViewBag.SenhaPadrao = _senhapadrao;
-            return View(UsuarioModel.RecuperarLista());
+            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 20, 30, 40 }, _quantMaxLinhasPorPagina);
+            ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
+            ViewBag.PaginaAtual = 1;
+
+            var lista = UsuarioModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
+            var quant = UsuarioModel.RecuperarQuantidade();
+            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
+
+            ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
+
+            return View(lista);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public JsonResult UsuarioPagina(int pagina, int tamPag)
+        {
+            var lista = UsuarioModel.RecuperarLista(pagina, tamPag);
+
+            return Json(lista);
         }
 
         [HttpPost]

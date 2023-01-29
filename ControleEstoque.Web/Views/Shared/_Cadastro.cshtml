@@ -1,10 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@model List<ControleEstoque.Web.Models.GrupoProdutoModel>
-@{
-    ViewBag.Title = "Cadastro de Grupo de Produtos";
+    ViewBag.Title = "Cadastro de " + ViewBag.Title; 
 }
 
 @RenderSection("Style", true)
@@ -36,7 +32,6 @@
             </div>
         </div>
 
-        @*Paginacao*@
         @if (ViewBag.QuantPaginas > 1)
         {
             <div class="row">
@@ -81,4 +76,5 @@
 @*JavaScript*@
 @section Scripts{
     @RenderSection("Scripts", true)
+    <script src="~/Scripts/Cadastro/CadastroBase.js"></script>
 }
