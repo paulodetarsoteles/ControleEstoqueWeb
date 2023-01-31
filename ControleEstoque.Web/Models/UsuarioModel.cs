@@ -1,4 +1,5 @@
 ﻿using ControleEstoque.Web.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
@@ -23,32 +24,45 @@ namespace ControleEstoque.Web.Models
         #region Validar Login do Usuário
         public static UsuarioModel Validar(string login, string senha)
         {
-            UsuarioModel ret = null; 
-            using (var conexao = new SqlConnection())
-            {
-                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
-                conexao.Open(); 
-                using (var comando = new SqlCommand())
-                {
-                    comando.Connection = conexao;
-                    comando.CommandText = "SELECT * FROM usuario WHERE login = @login AND senha = @senha";
-                    comando.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
-                    comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(senha);
-                    var reader = comando.ExecuteReader();
+            UsuarioModel ret = null;
+            SqlConnection conexao = new SqlConnection();
 
-                    if (reader.Read())
+            try
+            {
+                using (conexao)
+                {
+                    conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
+                    conexao.Open();
+                    using (var comando = new SqlCommand())
                     {
-                        ret = new UsuarioModel
+                        comando.Connection = conexao;
+                        comando.CommandText = "SELECT * FROM usuario WHERE login = @login AND senha = @senha";
+                        comando.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
+                        comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(senha);
+                        var reader = comando.ExecuteReader();
+
+                        if (reader.Read())
                         {
-                            Id = (int)reader["id"],
-                            Login = (string)reader["login"],
-                            Senha = (string)reader["senha"],
-                            Nome = (string)reader["nome"]
-                        }; 
+                            ret = new UsuarioModel
+                            {
+                                Id = (int)reader["id"],
+                                Login = (string)reader["login"],
+                                Senha = (string)reader["senha"],
+                                Nome = (string)reader["nome"]
+                            };
+                        }
                     }
                 }
             }
-            return ret; 
+            catch (Exception e)
+            {
+                throw new Exception("Não foi possível acessar o banco de dados. " + e.Message);
+            }
+            finally
+            {
+                if (conexao.State == ConnectionState.Open) conexao.Close();
+            }
+            return ret;
         }
         #endregion
 
@@ -78,11 +92,11 @@ namespace ControleEstoque.Web.Models
         public static List<UsuarioModel> RecuperarLista(int pagina, int tamPagina)
         {
             var ret = new List<UsuarioModel>();
-            using(var conexao = new SqlConnection())
+            using (var conexao = new SqlConnection())
             {
-                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString; 
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
                 conexao.Open();
-                using(var comando = new SqlCommand())
+                using (var comando = new SqlCommand())
                 {
                     int posicao = (pagina - 1) * tamPagina;
 
@@ -92,16 +106,16 @@ namespace ControleEstoque.Web.Models
                         posicao > 0 ? posicao - 1 : 0, tamPagina);
 
                     var reader = comando.ExecuteReader();
-                    
+
                     while (reader.Read())
                     {
                         ret.Add(new UsuarioModel
                         {
                             Id = (int)reader["id"],
-                            Login = (string)reader["login"], 
-                            Nome = (string)reader["nome"], 
+                            Login = (string)reader["login"],
+                            Nome = (string)reader["nome"],
                             Senha = (string)reader["senha"]
-                        }); 
+                        });
                     }
                 }
                 conexao.Close();
@@ -114,14 +128,14 @@ namespace ControleEstoque.Web.Models
         public static UsuarioModel RecuperarPeloId(int id)
         {
             var ret = new UsuarioModel();
-            using(var conexao = new SqlConnection())
+            using (var conexao = new SqlConnection())
             {
-                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString; 
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
                 conexao.Open();
-                using(var comando = new SqlCommand())
+                using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT id, login, nome FROM usuario WHERE (id = @id)"; 
+                    comando.CommandText = "SELECT id, login, nome FROM usuario WHERE (id = @id)";
                     comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     var reader = comando.ExecuteReader();
 
@@ -130,14 +144,14 @@ namespace ControleEstoque.Web.Models
                         ret = new UsuarioModel
                         {
                             Id = (int)reader["id"],
-                            Login = (string)reader["login"], 
+                            Login = (string)reader["login"],
                             Nome = (string)reader["nome"]
-                        }; 
+                        };
                     }
                 }
                 conexao.Close();
             }
-            return ret; 
+            return ret;
         }
         #endregion
 
@@ -171,12 +185,12 @@ namespace ControleEstoque.Web.Models
                             "nome = @nome WHERE id = @id;";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
                         comando.Parameters.Add("@login", SqlDbType.VarChar).Value = this.Login;
-                        if(!string.IsNullOrEmpty(this.Senha)) comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(this.Senha);
+                        if (!string.IsNullOrEmpty(this.Senha)) comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(this.Senha);
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
                         if (comando.ExecuteNonQuery() > 0) ret = this.Id;
                     }
                 }
-                conexao.Close(); 
+                conexao.Close();
             }
             return ret;
         }

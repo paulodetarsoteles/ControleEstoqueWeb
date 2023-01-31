@@ -24,11 +24,15 @@ namespace ControleEstoque.Web.Controllers
         {
             if (!ModelState.IsValid) return View(login);
 
-            var usuario = UsuarioModel.Validar(login.Usuario, login.Senha);
+            UsuarioModel usuario = UsuarioModel.Validar(login.Usuario, login.Senha);
 
             if (usuario != null)
             {
-                FormsAuthentication.SetAuthCookie(usuario.Nome, login.Esqueci);
+                //FormsAuthentication.SetAuthCookie(usuario.Nome, login.Esqueci);
+                string ticket = FormsAuthentication.Encrypt(new FormsAuthenticationTicket(1, usuario.Nome, DateTime.Now, DateTime.Now.AddHours(12), login.Esqueci, "Gerente"));
+                HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, ticket); 
+                Response.Cookies.Add(cookie);
+
                 if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
                 else return RedirectToAction("Index", "Home");
             }
