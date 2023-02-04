@@ -16,7 +16,6 @@ namespace ControleEstoque.Web.Models
 
         public bool Ativo { get; set; }
 
-        #region Retorna a Quantidade de Grupos
         public static int RecuperarQuantidade()
         {
             int retorno = 0;
@@ -36,9 +35,7 @@ namespace ControleEstoque.Web.Models
             }
             return retorno;
         }
-        #endregion
 
-        #region Recupera a Lista de Grupos
         public static List<GrupoProdutoModel> RecuperarLista(int pagina, int tamPagina)
         {
             List<GrupoProdutoModel> retorno = new List<GrupoProdutoModel>();
@@ -73,9 +70,7 @@ namespace ControleEstoque.Web.Models
             }
             return retorno;
         }
-        #endregion
 
-        #region Recupera o Grupo Pelo ID
         public static GrupoProdutoModel RecuperarPeloId(int id)
         {
             GrupoProdutoModel retorno = null;
@@ -104,9 +99,7 @@ namespace ControleEstoque.Web.Models
             }
             return retorno;
         }
-        #endregion
 
-        #region Salvar o Grupo de Produto
         public int Salvar()
         {
             int retorno = 0;
@@ -141,9 +134,7 @@ namespace ControleEstoque.Web.Models
             }
             return retorno;
         }
-        #endregion
 
-        #region Excluir Grupo de Produto
         public static bool ExcluirPeloId(int id)
         {
             bool retorno = false;
@@ -165,6 +156,5 @@ namespace ControleEstoque.Web.Models
             }
             return retorno;
         }
-        #endregion
     }
 }

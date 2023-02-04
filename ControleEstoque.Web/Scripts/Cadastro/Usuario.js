@@ -3,6 +3,7 @@
     $('#txt_nome').val(dados.Nome);
     $('#txt_login').val(dados.Login);
     $('#txt_senha').val(dados.Senha);
+    $('#ddl_perfil').val(dados.PerfilId); 
 }
 
 function set_focus_form() {
@@ -19,7 +20,8 @@ function get_dados_inclusao() {
             Id: 0,
             Nome: '',
             Login: '',
-            Senha: ''
+            Senha: '', 
+            PerfilId: 0
     };
 }
 
@@ -28,7 +30,8 @@ function get_dados_form() {
         Id: $('#id_cadastro').val(),
         Nome: $('#txt_nome').val(),
         Login: $('#txt_login').val(),
-        Senha: $('#txt_senha').val()
+        Senha: $('#txt_senha').val(), 
+        PerfilId: $('#ddl_perfil').val()
     }; 
 }
 

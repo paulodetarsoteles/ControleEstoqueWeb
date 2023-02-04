@@ -29,7 +29,7 @@ namespace ControleEstoque.Web
                 Response.Clear();
                 Response.StatusCode = 200; 
                 Response.ContentType = "application/json";
-                Response.Write("{\"Resultado\":\"AVISO\",\"Mensagens\":[\"Somente caracteres normais são aceitos neste campo!\"],\"IdSalvo\":\"\"}"); 
+                Response.Write("{\"Resultado\":\"AVISO\",\"Mensagens\":[\"Não são permitidos caracteres especiais!\"],\"IdSalvo\":\"\"}"); 
                 Response.End();
             }
         }

@@ -1,8 +1,5 @@
 ﻿using ControleEstoque.Web.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -28,16 +25,24 @@ namespace ControleEstoque.Web.Controllers
 
             if (usuario != null)
             {
-                //FormsAuthentication.SetAuthCookie(usuario.Nome, login.Esqueci);
-                string ticket = FormsAuthentication.Encrypt(new FormsAuthenticationTicket(1, usuario.Nome, DateTime.Now, DateTime.Now.AddHours(12), login.Esqueci, "Gerente"));
-                HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, ticket); 
+                string ticket = FormsAuthentication.Encrypt(
+                    new FormsAuthenticationTicket(
+                        1, 
+                        usuario.Nome, 
+                        DateTime.Now, 
+                        DateTime.Now.AddHours(12), 
+                        login.Esqueci, 
+                        PerfilModel.RecuperarPeloId(usuario.PerfilId).Nome
+                        )
+                    );
+                HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, ticket);
                 Response.Cookies.Add(cookie);
 
                 if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
                 else return RedirectToAction("Index", "Home");
             }
 
-            else ModelState.AddModelError("", "Login Inválido!"); 
+            else ModelState.AddModelError("", "Login Inválido!");
             return View(login);
         }
 

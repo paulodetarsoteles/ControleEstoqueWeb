@@ -8,13 +8,14 @@ namespace ControleEstoque.Web.Controllers
 {
     public class CadastroUsuarioController : Controller
     {
-        private const int _quantMaxLinhasPorPagina = 10; 
+        private const int _quantMaxLinhasPorPagina = 10;
         private const string _senhapadrao = "1q2w3e4r";
 
         [Authorize]
         public ActionResult Index()
         {
             ViewBag.SenhaPadrao = _senhapadrao;
+            ViewBag.ListaPerfil = UsuarioModel.RecuperarListaAtivos();
             ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 20, 30, 40 }, _quantMaxLinhasPorPagina);
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
