@@ -6,16 +6,15 @@ using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Controllers
 {
+    [Authorize(Roles = "Gerente, Administrativo")]
     public class CadastroUsuarioController : Controller
     {
         private const int _quantMaxLinhasPorPagina = 10;
         private const string _senhapadrao = "1q2w3e4r";
 
-        [Authorize]
         public ActionResult Index()
         {
             ViewBag.SenhaPadrao = _senhapadrao;
-            ViewBag.ListaPerfil = UsuarioModel.RecuperarListaAtivos();
             ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 20, 30, 40 }, _quantMaxLinhasPorPagina);
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
@@ -30,7 +29,6 @@ namespace ControleEstoque.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public JsonResult UsuarioPagina(int pagina, int tamPag)
         {
@@ -40,7 +38,6 @@ namespace ControleEstoque.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult RecuperarUsuario(int id)
         {
@@ -48,7 +45,6 @@ namespace ControleEstoque.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult SalvarUsuario(UsuarioModel model)
         {
@@ -84,8 +80,8 @@ namespace ControleEstoque.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gerente")]
         public ActionResult ExcluirUsuario(int id)
         {
             return Json(UsuarioModel.ExcluirPeloId(id));

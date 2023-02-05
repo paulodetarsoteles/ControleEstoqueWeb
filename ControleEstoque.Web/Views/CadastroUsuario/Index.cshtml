@@ -61,12 +61,6 @@
                 @Html.TextBox("txt_senha", null, new { @class = "form-control", type = "password" })
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-12">
-                @Html.Label("txt_perfil", "Perfil", new { @class = "col-md-3 control-label" })
-                @Html.DropDownList("ddl_perfil", new SelectList(ViewBag.ListaPerfil, "Id", "Nome"), new { @class = "form-control"})
-            </div>
-        </div>
     </div>
 }
 

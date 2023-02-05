@@ -45,7 +45,7 @@ namespace ControleEstoque.Web.Controllers.Cadastro
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Gerente, Administrativo")]
         [ValidateAntiForgeryToken]
         public JsonResult SalvarUnidadeMedida(UnidadeMedidaModel model)
         {
@@ -79,7 +79,7 @@ namespace ControleEstoque.Web.Controllers.Cadastro
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Gerente")]
         [ValidateAntiForgeryToken]
         public JsonResult ExcluirUnidadeMedida(int id)
         {

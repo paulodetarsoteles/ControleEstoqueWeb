@@ -21,9 +21,6 @@ namespace ControleEstoque.Web.Models
         [Required(ErrorMessage = "Nome obrigatório")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "Informar o perfil")]
-        public int PerfilId { get; set; }
-
         public static UsuarioModel Validar(string login, string senha)
         {
             UsuarioModel ret = null;
@@ -50,8 +47,7 @@ namespace ControleEstoque.Web.Models
                                 Id = (int)reader["id"],
                                 Login = (string)reader["login"],
                                 Senha = (string)reader["senha"],
-                                Nome = (string)reader["nome"],
-                                PerfilId = (int)reader["perfilId"]
+                                Nome = (string)reader["nome"]
                             };
                         }
                     }
@@ -113,8 +109,7 @@ namespace ControleEstoque.Web.Models
                             Id = (int)reader["id"],
                             Login = (string)reader["login"],
                             Nome = (string)reader["nome"],
-                            Senha = (string)reader["senha"],
-                            PerfilId = (int)reader["perfilId"]
+                            Senha = (string)reader["senha"]
                         });
                     }
                 }
@@ -183,8 +178,7 @@ namespace ControleEstoque.Web.Models
                         {
                             Id = (int)reader["id"],
                             Login = (string)reader["login"],
-                            Nome = (string)reader["nome"],
-                            PerfilId = (int)reader["perfilId"]
+                            Nome = (string)reader["nome"]
                         };
                     }
                 }
@@ -208,14 +202,13 @@ namespace ControleEstoque.Web.Models
                     if (model.Id == 0)
                     {
                         comando.CommandText = "INSERT INTO usuario " +
-                                              "(login, senha, nome, perfilId) " +
+                                              "(login, senha, nome) " +
                                               "VALUES " +
-                                              "(@login, @senha, @nome, @perfilId) " +
+                                              "(@login, @senha, @nome) " +
                                               "SELECT CONVERT(int, SCOPE_IDENTITY());";
                         comando.Parameters.Add("@login", SqlDbType.VarChar).Value = this.Login;
                         comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(this.Senha);
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@perfilId", SqlDbType.VarChar).Value = this.PerfilId;
 
                         ret = (int)comando.ExecuteScalar();
                     }
@@ -223,14 +216,12 @@ namespace ControleEstoque.Web.Models
                     {
                         comando.CommandText = "UPDATE usuario SET login = @login, " +
                                               (!string.IsNullOrEmpty(this.Senha) ? "senha = @senha, " : "") +
-                                              "nome = @nome, " +
-                                              "perfilId = @perfilId " +
+                                              "nome = @nome " +
                                               "WHERE id = @id; ";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
                         comando.Parameters.Add("@login", SqlDbType.VarChar).Value = this.Login;
                         if (!string.IsNullOrEmpty(this.Senha)) comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(this.Senha);
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@perfilId", SqlDbType.Int).Value = this.PerfilId;
                         if (comando.ExecuteNonQuery() > 0) ret = this.Id;
                     }
                 }
