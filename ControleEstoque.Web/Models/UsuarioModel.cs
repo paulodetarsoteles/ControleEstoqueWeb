@@ -118,46 +118,6 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
-        public static List<PerfilModel> RecuperarListaAtivos()
-        {
-            List<PerfilModel> ret = new List<PerfilModel>();
-            SqlConnection conexao = new SqlConnection(ConfigurationManager.ConnectionStrings["principal"].ConnectionString);
-            SqlCommand comando = new SqlCommand();
-            comando.Connection = conexao;
-            comando.CommandText = string.Format("select * " +
-                                                "from perfil " +
-                                                "where ativo = 1 " +
-                                                "order by nome; ");
-
-            using (comando)
-            {
-                try
-                {
-                    conexao.Open();
-                    var reader = comando.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        ret.Add(new PerfilModel
-                        {
-                            Id = (int)reader["id"],
-                            Nome = (string)reader["nome"], 
-                            Ativo = (bool)reader["ativo"]
-                        }); 
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Não foi possível conexao com o banco de dados. " + ex.Message);
-                }
-                finally
-                {
-                    if (conexao.State == ConnectionState.Open) conexao.Close();
-                }
-            }
-            return ret; 
-        }
-
         public static UsuarioModel RecuperarPeloId(int id)
         {
             var ret = new UsuarioModel();
@@ -248,6 +208,44 @@ namespace ControleEstoque.Web.Models
                     }
                     conexao.Close();
                 }
+            }
+            return ret;
+        }
+
+        public string RecuperarStringNomePerfis()
+        {
+            string ret = string.Empty;
+            var conexao = new SqlConnection();
+            conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
+            conexao.Open();
+            try
+            {
+                using (var comando = new SqlCommand())
+                {
+                    comando.Connection = conexao;
+                    comando.CommandText = string.Format(
+                        "SELECT p.nome " +
+                        "FROM perfilUsuario pu, perfil p " +
+                        "WHERE pu.usuarioId = @usuarioId " +
+                        "AND pu.perfilId = p.id " +
+                        "AND p.ativo = 1; ");
+                    comando.Parameters.Add("@usuarioId", SqlDbType.Int).Value = this.Id;
+
+                    var reader = comando.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        ret += (ret != string.Empty ? ";" : "") + (string)reader["nome"];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao conectar com o banco de dados. " + ex.Message);
+            }
+            finally
+            {
+                if (conexao.State == ConnectionState.Open) conexao.Close();
             }
             return ret;
         }

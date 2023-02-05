@@ -27,12 +27,12 @@ namespace ControleEstoque.Web.Controllers
             {
                 string ticket = FormsAuthentication.Encrypt(
                     new FormsAuthenticationTicket(
-                        1, 
-                        usuario.Nome, 
-                        DateTime.Now, 
-                        DateTime.Now.AddHours(12), 
-                        login.Esqueci, 
-                        PerfilModel.RecuperarPeloId(usuario.PerfilId).Nome
+                        1,
+                        usuario.Nome,
+                        DateTime.Now,
+                        DateTime.Now.AddHours(12),
+                        login.Esqueci,
+                        usuario.RecuperarStringNomePerfis()
                         )
                     );
                 HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, ticket);
