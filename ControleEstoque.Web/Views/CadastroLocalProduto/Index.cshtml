@@ -1,14 +1,14 @@
-﻿@model List<ControleEstoque.Web.Models.GrupoProdutoModel>
+﻿@model List<ControleEstoque.Web.Models.LocalProdutoModel>
 
 @{
     Layout = "~/Views/Shared/_Cadastro.cshtml";
-    ViewBag.Title = "Grupo de Produtos";
-    ViewBag.Lista = Model; 
+    ViewBag.Title = "Local de Produtos";
+    ViewBag.Lista = Model;
 }
 
 @section Style{
     <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
-    <link href="~/Content/Cadastro/GrupoProduto.css" rel="stylesheet" />
+    <link href="~/Content/Cadastro/LocalProduto.css" rel="stylesheet" />
 }
 
 @section TituloGrid{
@@ -64,11 +64,11 @@
     <script src="~/Scripts/bootstrap-select.js"></script>
     <script>
         var tituloPagina = '@ViewBag.Title';
-        var url_alterar = '@Url.Action("RecuperarGrupoProduto", "CadastroGrupoProduto")';
-        var url_excluir = '@Url.Action("ExcluirGrupoProduto", "CadastroGrupoProduto")';
-        var url_confirmar = '@Url.Action("SalvarGrupoProduto", "CadastroGrupoProduto")';
-        var url_page_click = '@Url.Action("GrupoProdutoPagina", "CadastroGrupoProduto")';
-        var url_tam_pag_change = '@Url.Action("GrupoProdutoPagina", "CadastroGrupoProduto")';
+        var url_alterar = '@Url.Action("RecuperarLocalProduto", "CadastroLocalProduto")';
+        var url_excluir = '@Url.Action("ExcluirLocalProduto", "CadastroLocalProduto")';
+        var url_confirmar = '@Url.Action("SalvarLocalProduto", "CadastroLocalProduto")';
+        var url_page_click = '@Url.Action("GrupoLocalPagina", "CadastroLocalProduto")';
+        var url_tam_pag_change = '@Url.Action("GrupoLocalPagina", "CadastroLocalProduto")';
     </script>
-    <script src="~/Scripts/Cadastro/GrupoProduto.js"></script>
+    <script src="~/Scripts/Cadastro/LocalProduto.js"></script>
 }

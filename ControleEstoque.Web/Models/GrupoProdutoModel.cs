@@ -11,7 +11,7 @@ namespace ControleEstoque.Web.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Nome do grupo é obrigatório!")]
+        [Required(ErrorMessage = "Nome é obrigatório!")]
         public string Nome { get; set; }
 
         public bool Ativo { get; set; }

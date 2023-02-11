@@ -91,6 +91,11 @@ $(document)
                     $.post(url, add_anti_forgery_token(param), function (response) {
                         if (response) {
                             tr.remove();
+                            var quant = $('#grid_cadastro > tbody > tr').length; 
+                            if (quant == 0) {
+                                $('#grid_cadastro').addClass('invisivel');
+                                $('#mensagem_grid').removeClass('invisivel'); 
+                            }
                         }
                     });
                 }
@@ -110,6 +115,8 @@ $(document)
                     var table = $('#grid_cadastro').find('tbody'),
                         linha = criar_linha_grid(param);
                     table.append(linha);
+                    $('#grid_cadastro').removeClass('invisivel'); 
+                    $('#mensagem_grid').addClass('invisivel'); 
                 }
                 else {
                     var linha = $('#grid_cadastro').find('tr[data-id=' + param.Id + ']').find('td');

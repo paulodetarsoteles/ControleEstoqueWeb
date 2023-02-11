@@ -1,6 +1,7 @@
 ﻿@{
+    var lista = ViewBag.Lista;
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Cadastro de " + ViewBag.Title; 
+    ViewBag.Title = "Cadastro de " + ViewBag.Title;
 }
 
 @RenderSection("Style", true)
@@ -19,7 +20,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table id="grid_cadastro" class="table table-bordered table-striped table-hover">
+                <table id="grid_cadastro" class="table table-bordered table-striped table-hover @Html.Raw(lista == null || lista.Count == 0 ? "invisivel" : "")">
                     <thead>
                         <tr>
                             @RenderSection("TituloGrid", true)
@@ -29,6 +30,9 @@
                         @RenderSection("LinhaGrid", true)
                     </tbody>
                 </table>
+                <div id="mensagem_grid" @Html.Raw(lista != null && lista.Count > 0 ? "class=\"invisivel\"" : "")>
+                    Nenhum registro em @ViewBag.Title 
+                </div>
             </div>
         </div>
 

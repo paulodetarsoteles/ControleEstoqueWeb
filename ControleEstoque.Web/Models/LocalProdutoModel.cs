@@ -6,15 +6,12 @@ using System.Data.SqlClient;
 
 namespace ControleEstoque.Web.Models
 {
-    public class UnidadeMedidaModel
+    public class LocalProdutoModel
     {
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Nome é obrigatório!")]
         public string Nome { get; set; }
-
-        [Required(ErrorMessage = "Sigla obrigatória!")]
-        public string Sigla { get; set; }
 
         public bool Ativo { get; set; }
 
@@ -30,7 +27,7 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT COUNT(*) FROM unidade_medida";
+                    comando.CommandText = "SELECT COUNT(*) FROM local_produto";
                     retorno = (int)comando.ExecuteScalar();
                 }
                 conexao.Close();
@@ -38,9 +35,9 @@ namespace ControleEstoque.Web.Models
             return retorno;
         }
 
-        public static List<UnidadeMedidaModel> RecuperarLista(int pagina, int tamPagina)
+        public static List<LocalProdutoModel> RecuperarLista(int pagina, int tamPagina)
         {
-            List<UnidadeMedidaModel> retorno = new List<UnidadeMedidaModel>();
+            List<LocalProdutoModel> retorno = new List<LocalProdutoModel>();
 
             using (var conexao = new SqlConnection())
             {
@@ -53,18 +50,17 @@ namespace ControleEstoque.Web.Models
 
                     comando.Connection = conexao;
                     comando.CommandText = string.Format(
-                        "SELECT * FROM unidade_medida ORDER BY nome OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY",
+                        "SELECT * FROM local_produto ORDER BY nome OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY",
                         posicao > 0 ? posicao - 1 : 0, tamPagina);
 
                     var reader = comando.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        retorno.Add(new UnidadeMedidaModel()
+                        retorno.Add(new LocalProdutoModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Sigla = (string)reader["sigla"],
                             Ativo = (bool)reader["ativo"]
                         });
                     }
@@ -74,9 +70,9 @@ namespace ControleEstoque.Web.Models
             return retorno;
         }
 
-        public static UnidadeMedidaModel RecuperarPeloId(int id)
+        public static LocalProdutoModel RecuperarPeloId(int id)
         {
-            UnidadeMedidaModel retorno = null;
+            LocalProdutoModel retorno = null;
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -84,17 +80,16 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT * FROM unidade_medida WHERE (id = @id)";
+                    comando.CommandText = "SELECT * FROM local_produto WHERE (id = @id)";
                     comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     var reader = comando.ExecuteReader();
 
                     if (reader.Read())
                     {
-                        retorno = new UnidadeMedidaModel()
+                        retorno = new LocalProdutoModel()
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Sigla = (string)reader["sigla"],
                             Ativo = (bool)reader["ativo"]
                         };
                     }
@@ -118,20 +113,18 @@ namespace ControleEstoque.Web.Models
                     comando.Connection = conexao;
                     if (model == null)
                     {
-                        comando.CommandText = "INSERT INTO unidade_medida (nome, sigla, ativo) VALUES (@nome, @sigla, @ativo); " +
+                        comando.CommandText = "INSERT INTO local_produto (nome, ativo) VALUES (@nome, @ativo); " +
                                               "SELECT CONVERT(int, SCOPE_IDENTITY());";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@sigla", SqlDbType.VarChar).Value = this.Sigla;
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0);
 
                         retorno = (int)comando.ExecuteScalar();
                     }
                     else
                     {
-                        comando.CommandText = "UPDATE unidade_medida SET nome = @nome, sigla = @sigla, ativo = @ativo WHERE id = @id;";
+                        comando.CommandText = "UPDATE local_produto SET nome = @nome, ativo = @ativo WHERE id = @id;";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@sigla", SqlDbType.VarChar).Value = this.Sigla;
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0);
                         if (comando.ExecuteNonQuery() > 0) retorno = this.Id;
                     }
@@ -153,7 +146,7 @@ namespace ControleEstoque.Web.Models
                     using (var comando = new SqlCommand())
                     {
                         comando.Connection = conexao;
-                        comando.CommandText = "DELETE FROM unidade_medida WHERE (id = @id)";
+                        comando.CommandText = "DELETE FROM local_produto WHERE (id = @id)";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                         retorno = (comando.ExecuteNonQuery()) > 0;
                     }
