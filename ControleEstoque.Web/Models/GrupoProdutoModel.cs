@@ -36,7 +36,7 @@ namespace ControleEstoque.Web.Models
             return retorno;
         }
 
-        public static List<GrupoProdutoModel> RecuperarLista(int pagina, int tamPagina)
+        public static List<GrupoProdutoModel> RecuperarLista(int pagina, int tamPagina, string filtro = "")
         {
             List<GrupoProdutoModel> retorno = new List<GrupoProdutoModel>();
 
@@ -48,10 +48,18 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     int posicao = (pagina - 1) * tamPagina;
+                    string filtroWhere = ""; 
+
+                    if(!string.IsNullOrEmpty(filtro)) 
+                        filtroWhere = string.Format("WHERE LOWER(nome) LIKE '%{0}%' ", filtro.ToLower()); 
 
                     comando.Connection = conexao;
                     comando.CommandText = string.Format(
-                        "SELECT * FROM grupo_produto ORDER BY nome OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY",
+                        "SELECT * " +
+                        "FROM grupo_produto " +
+                        filtroWhere + 
+                        "ORDER BY nome " +
+                        "OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY;",
                         posicao > 0 ? posicao - 1 : 0, tamPagina);
 
                     var reader = comando.ExecuteReader();
