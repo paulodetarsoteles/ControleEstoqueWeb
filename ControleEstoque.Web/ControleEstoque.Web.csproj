@@ -218,6 +218,7 @@
     <Content Include="Views\CadastroLocalProduto\Index.cshtml" />
     <Content Include="Views\CadastroMarcaProduto\Index.cshtml" />
     <Content Include="Views\CadastroProduto\Index.cshtml" />
+    <Content Include="Views\CadastroGrupoProduto\RecuperarGrupoProduto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
