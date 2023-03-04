@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace ControleEstoque.Web.Models
 {
@@ -14,6 +14,8 @@ namespace ControleEstoque.Web.Models
         public string Nome { get; set; }
 
         public bool Ativo { get; set; }
+
+        #region Acesso a dados
 
         public static int RecuperarQuantidade()
         {
@@ -155,5 +157,7 @@ namespace ControleEstoque.Web.Models
             }
             return retorno;
         }
+
+        #endregion
     }
 }

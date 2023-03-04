@@ -21,6 +21,8 @@ namespace ControleEstoque.Web.Models
         [Required(ErrorMessage = "Nome obrigatório")]
         public string Nome { get; set; }
 
+        #region Acesso a dados
+
         public static UsuarioModel Validar(string login, string senha)
         {
             UsuarioModel ret = null;
@@ -249,5 +251,7 @@ namespace ControleEstoque.Web.Models
             }
             return ret;
         }
+
+        #endregion
     }
 }

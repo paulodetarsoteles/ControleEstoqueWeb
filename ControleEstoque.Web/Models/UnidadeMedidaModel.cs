@@ -18,6 +18,8 @@ namespace ControleEstoque.Web.Models
 
         public bool Ativo { get; set; }
 
+        #region Acesso a dados
+
         public static int RecuperarQuantidade()
         {
             int retorno = 0;
@@ -162,5 +164,7 @@ namespace ControleEstoque.Web.Models
             }
             return retorno;
         }
+
+        #endregion
     }
 }

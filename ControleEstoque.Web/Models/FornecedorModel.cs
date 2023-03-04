@@ -3,15 +3,34 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using static ControleEstoque.Web.Models.Enums;
 
 namespace ControleEstoque.Web.Models
 {
-    public class GrupoProdutoModel
+    public class FornecedorModel
     {
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Nome é obrigatório!")]
         public string Nome { get; set; }
+
+        public string RazaoSocial { get; set; }
+
+        [Display(Name = "CPF/CNPJ")]
+        [RegularExpression(@"^[0-9''-'\s]{11,14}$", ErrorMessage = "Digite apenas os números do documento")]
+        public string NumDocumento { get; set; }
+
+        [Display(Name = "Tipo de Pessoa")]
+        public TipoPessoa TipoPessoa { get; set; }
+
+        [StringLength(11, ErrorMessage = "DDD+TELEFONE - EX. 11988880000")]
+        public string Telefone { get; set; }
+
+        [Required(ErrorMessage = "Campo obrigatório!")]
+        public string Contato { get; set; }
+
+        [Display(Name = "Endereço")]
+        public string Endereco { get; set; }
 
         public bool Ativo { get; set; }
 
@@ -29,7 +48,7 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT COUNT(*) FROM grupo_produto";
+                    comando.CommandText = "SELECT COUNT(*) FROM fornecedor";
                     retorno = (int)comando.ExecuteScalar();
                 }
                 conexao.Close();
@@ -37,9 +56,9 @@ namespace ControleEstoque.Web.Models
             return retorno;
         }
 
-        public static List<GrupoProdutoModel> RecuperarLista(int pagina, int tamPagina, string filtro = "")
+        public static List<FornecedorModel> RecuperarLista(int pagina, int tamPagina, string filtro = "")
         {
-            List<GrupoProdutoModel> retorno = new List<GrupoProdutoModel>();
+            List<FornecedorModel> retorno = new List<FornecedorModel>();
 
             using (var conexao = new SqlConnection())
             {
@@ -57,7 +76,7 @@ namespace ControleEstoque.Web.Models
                     comando.Connection = conexao;
                     comando.CommandText = string.Format(
                         "SELECT * " +
-                        "FROM grupo_produto " +
+                        "FROM fornecedor " +
                         filtroWhere +
                         "ORDER BY nome " +
                         "OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY;",
@@ -67,10 +86,16 @@ namespace ControleEstoque.Web.Models
 
                     while (reader.Read())
                     {
-                        retorno.Add(new GrupoProdutoModel
+                        retorno.Add(new FornecedorModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
+                            RazaoSocial = (string)reader["razaoSocial"],
+                            NumDocumento = (string)reader["numDocumento"],
+                            TipoPessoa = (TipoPessoa)((int)reader["tipoPessoa"]),
+                            Telefone = (string)reader["telefone"],
+                            Contato = (string)reader["contato"],
+                            Endereco = (string)reader["endereco"],
                             Ativo = (bool)reader["ativo"]
                         });
                     }
@@ -80,9 +105,9 @@ namespace ControleEstoque.Web.Models
             return retorno;
         }
 
-        public static GrupoProdutoModel RecuperarPeloId(int id)
+        public static FornecedorModel RecuperarPeloId(int id)
         {
-            GrupoProdutoModel retorno = null;
+            FornecedorModel retorno = null;
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -90,16 +115,22 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "SELECT * FROM grupo_produto WHERE (id = @id)";
+                    comando.CommandText = "SELECT * FROM fornecedor WHERE (id = @id)";
                     comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     var reader = comando.ExecuteReader();
 
                     if (reader.Read())
                     {
-                        retorno = new GrupoProdutoModel()
+                        retorno = new FornecedorModel()
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
+                            RazaoSocial = (string)reader["razaoSocial"],
+                            NumDocumento = (string)reader["numDocumento"],
+                            TipoPessoa = (TipoPessoa)((int)reader["tipoPessoa"]),
+                            Telefone = (string)reader["telefone"],
+                            Contato = (string)reader["contato"],
+                            Endereco = (string)reader["endereco"],
                             Ativo = (bool)reader["ativo"]
                         };
                     }
@@ -123,18 +154,46 @@ namespace ControleEstoque.Web.Models
                     comando.Connection = conexao;
                     if (model == null)
                     {
-                        comando.CommandText = "INSERT INTO grupo_produto (nome, ativo) VALUES (@nome, @ativo); " +
+                        comando.CommandText = "INSERT INTO fornecedor " +
+                                                    "(nome, razaoSocial, numDocumento, tipoPessoa, telefone, contato, endereco, ativo) " +
+                                                 "VALUES " +
+                                                    "(@nome, @razaoSocial, @numDocumento, @tipoPessoa, @telefone, @contato, @endereco, @ativo); " +
                                               "SELECT CONVERT(int, SCOPE_IDENTITY());";
+
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
+                        comando.Parameters.Add("@razaoSocial", SqlDbType.VarChar).Value = this.RazaoSocial;
+                        comando.Parameters.Add("@numDocumento", SqlDbType.VarChar).Value = this.NumDocumento;
+                        comando.Parameters.Add("@tipoPessoa", SqlDbType.Int).Value = this.TipoPessoa;
+                        comando.Parameters.Add("@telefone", SqlDbType.VarChar).Value = this.Telefone;
+                        comando.Parameters.Add("@contato", SqlDbType.VarChar).Value = this.Contato;
+                        comando.Parameters.Add("@endereco", SqlDbType.VarChar).Value = this.Endereco;
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0);
 
                         retorno = (int)comando.ExecuteScalar();
                     }
                     else
                     {
-                        comando.CommandText = "UPDATE grupo_produto SET nome = @nome, ativo = @ativo WHERE id = @id;";
+                        comando.CommandText = "UPDATE fornecedor " +
+                                              "SET " +
+                                                    "nome = @nome, " +
+                                                    "razaoSosial = @razaoSocial " +
+                                                    "numDocumento = @numDocumento " +
+                                                    "tipoPessoa = @tipoPessoa " +
+                                                    "telefone = @telefone " +
+                                                    "contato = @contato " +
+                                                    "endereco = @endereco " +
+                                                    "ativo = @ativo " +
+                                              "WHERE " +
+                                                    "id = @id;";
+
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
+                        comando.Parameters.Add("@razaoSocial", SqlDbType.VarChar).Value = this.RazaoSocial;
+                        comando.Parameters.Add("@numDocumento", SqlDbType.VarChar).Value = this.NumDocumento;
+                        comando.Parameters.Add("@tipoPessoa", SqlDbType.Int).Value = this.TipoPessoa;
+                        comando.Parameters.Add("@telefone", SqlDbType.VarChar).Value = this.Telefone;
+                        comando.Parameters.Add("@contato", SqlDbType.VarChar).Value = this.Contato;
+                        comando.Parameters.Add("@endereco", SqlDbType.VarChar).Value = this.Endereco;
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0);
                         if (comando.ExecuteNonQuery() > 0) retorno = this.Id;
                     }
@@ -156,7 +215,7 @@ namespace ControleEstoque.Web.Models
                     using (var comando = new SqlCommand())
                     {
                         comando.Connection = conexao;
-                        comando.CommandText = "DELETE FROM grupo_produto WHERE (id = @id)";
+                        comando.CommandText = "DELETE FROM fornecedor WHERE (id = @id)";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                         retorno = (comando.ExecuteNonQuery()) > 0;
                     }
