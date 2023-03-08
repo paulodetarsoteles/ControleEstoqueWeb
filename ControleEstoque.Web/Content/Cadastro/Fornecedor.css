@@ -23,11 +23,10 @@
     margin-bottom: 20px;
 }
 
-.dialog > .modal-dialog {
+.dialogo > .modal-dialog {
     width: 700px !important;
 }
 
 .modal-body {
-    height: 550px;
-    overflow-y: scroll;
+    height: 430px;
 }

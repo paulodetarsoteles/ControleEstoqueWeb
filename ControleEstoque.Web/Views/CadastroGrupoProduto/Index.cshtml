@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Cadastro.cshtml";
     ViewBag.Title = "Grupo de Produtos";
-    ViewBag.Lista = Model; 
+    ViewBag.Lista = Model;
 }
 
 @section Style{
@@ -44,18 +44,16 @@
 }
 
 @section CamposCadastro{
-    <div class="row">
-        <div class="form-group">
-            <div class="col-md-12">
-                @Html.Label("txt_nome", "Nome", new { @class = "col-md-3 control-label" })
-                @Html.TextBox("txt_nome", null, new { @class = "form-control" })
-            </div>
+    <div class="row"  style="margin-bottom: 15px">
+        <div class="col-md-12">
+            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
+            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
         </div>
-        <div class="form-group">
-            <div class="col-md-12">
-                @Html.Label("cbx_ativo", "Ativo", new { @class = "col-md-3 control-label" })
-                @Html.CheckBox("cbx_ativo")
-            </div>
+    </div>
+    <div class="row" style="margin-bottom: 15px">
+        <div class="col-md-8">
+            @Html.Label("cbx_ativo", "Ativo", new { @class = "control-label" })
+            @Html.CheckBox("cbx_ativo")
         </div>
     </div>
 }

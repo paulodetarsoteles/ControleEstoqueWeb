@@ -14,7 +14,7 @@
 @section TituloGrid{
     <th>Nome</th>
     <th>Telefone</th>
-    <th>contato</th>
+    <th>Contato</th>
     <th>Ativo</th>
     <th>Ação</th>
 }
@@ -30,6 +30,8 @@
                 var ativo = (item.Ativo ? "SIM" : "NÃO");
                 <tr data-id="@item.Id">
                     <td>@item.Nome</td>
+                    <td>@item.Telefone</td>
+                    <td>@item.Contato</td>
                     <td>@ativo</td>
                     <td>
                         <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
@@ -47,16 +49,54 @@
 
 @section CamposCadastro{
     <div class="row">
-        <div class="form-group">
-            <div class="col-md-12">
-                @Html.Label("txt_nome", "Nome", new { @class = "col-md-3 control-label" })
-                @Html.TextBox("txt_nome", null, new { @class = "form-control" })
+        <div class="col-md-8">
+            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
+            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-4" style="line-height: 2.2em">
+            <div class="form-check">
+                @Html.RadioButton("cbx_pessoa", 2, new { id = "cbx_pessoa_juridica", @class = "form-check-imput" })
+                @Html.Label("cbx_pessoa_juridica", "Pessoa Jurídica", new { @class = "form-check-label" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButton("cbx_pessoa", 1, new { id = "cbx_pessoa_fisica", @class = "form-check-imput" })
+                @Html.Label("cbx_pessoa_fisica", "Pessoa Física", new { @class = "form-check-label" })
             </div>
         </div>
-        <div class="form-group">
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.Label("txt_num_documento", "CPF/CNPJ", new { @class = "control-label" })
+            @Html.TextBox("txt_num_documento", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-8" id="container_razao_social">
+            @Html.Label("txt_razao_social", "Razão social", new { @class = "control-label" })
+            @Html.TextBox("txt_razao_social", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.Label("txt_telefone", "Telefone", new { @class = "control-label" })
+            @Html.TextBox("txt_telefone", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-8">
+            @Html.Label("txt_contato", "Contato", new { @class = "control-label" })
+            @Html.TextBox("txt_contato", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row" style="margin-top: 15px">
+        <div class="col-md-12">
             <div class="col-md-12">
-                @Html.Label("cbx_ativo", "Ativo", new { @class = "col-md-3 control-label" })
-                @Html.CheckBox("cbx_ativo")
+                @Html.Label("txt_endereco", "Endereço", new { @class = "control-label" })
+                @Html.TextBox("txt_endereco", null, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 15px">
+        <div class="col-md-4">
+            <div class="form-check">
+                @Html.CheckBox("cbx_ativo", new { @class = "form-check-input" })
+                @Html.Label("cbx_ativo", "Ativo", new { @class = "form-check-label" })
             </div>
         </div>
     </div>
@@ -64,14 +104,14 @@
 
 @section Scripts{
     <script src="~/Scripts/bootstrap-select.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
     <script>
         var tituloPagina = '@ViewBag.Title';
-        var url_alterar = '@Url.Action("RecuperarGrupoProduto", "CadastroGrupoProduto")';
-        var url_excluir = '@Url.Action("ExcluirGrupoProduto", "CadastroGrupoProduto")';
-        var url_confirmar = '@Url.Action("SalvarGrupoProduto", "CadastroGrupoProduto")';
-        var url_page_click = '@Url.Action("GrupoProdutoPagina", "CadastroGrupoProduto")';
-        var url_tam_pag_change = '@Url.Action("GrupoProdutoPagina", "CadastroGrupoProduto")';
-        var url_filtro_change = '@Url.Action("GrupoProdutoPagina", "CadastroGrupoProduto")';
+        var url_alterar = '@Url.Action("RecuperarFornecedor", "CadastroFornecedor")';
+        var url_excluir = '@Url.Action("ExcluirFornecedor", "CadastroFornecedor")';
+        var url_confirmar = '@Url.Action("SalvarFornecedor", "CadastroFornecedor")';
+        var url_page_click = '@Url.Action("FornecedorPagina", "CadastroFornecedor")';
+        var url_tam_pag_change = '@Url.Action("FornecedorPagina", "CadastroFornecedor")';
     </script>
-    <script src="~/Scripts/Cadastro/GrupoProduto.js"></script>
+    <script src="~/Scripts/Cadastro/Fornecedor.js"></script>
 }
