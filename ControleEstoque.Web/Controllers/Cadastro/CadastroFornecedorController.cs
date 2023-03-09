@@ -59,10 +59,15 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             {
                 try
                 {
+                    model.NumDocumento = String.Join("", System.Text.RegularExpressions.Regex.Split(model.NumDocumento, @"[^\d]"));
+                    model.Telefone = String.Join("", System.Text.RegularExpressions.Regex.Split(model.Telefone, @"[^\d]")); 
+
                     int id = model.Salvar();
 
-                    if (id > 0) idSalvo = id.ToString();
-                    else resultado = "Erro";
+                    if (id > 0) 
+                        idSalvo = id.ToString();
+                    else 
+                        resultado = "Erro";
                 }
                 catch (Exception)
                 {

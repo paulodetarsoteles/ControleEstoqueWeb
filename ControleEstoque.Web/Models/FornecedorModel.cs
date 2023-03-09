@@ -17,13 +17,11 @@ namespace ControleEstoque.Web.Models
         public string RazaoSocial { get; set; }
 
         [Display(Name = "CPF/CNPJ")]
-        [RegularExpression(@"^[0-9''-'\s]{11,14}$", ErrorMessage = "Digite apenas os números do documento")]
         public string NumDocumento { get; set; }
 
         [Display(Name = "Tipo de Pessoa")]
         public TipoPessoa TipoPessoa { get; set; }
 
-        [StringLength(11, ErrorMessage = "DDD+TELEFONE - EX. 11988880000")]
         public string Telefone { get; set; }
 
         [Required(ErrorMessage = "Campo obrigatório!")]
@@ -161,12 +159,12 @@ namespace ControleEstoque.Web.Models
                                               "SELECT CONVERT(int, SCOPE_IDENTITY());";
 
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@razaoSocial", SqlDbType.VarChar).Value = this.RazaoSocial;
-                        comando.Parameters.Add("@numDocumento", SqlDbType.VarChar).Value = this.NumDocumento;
+                        comando.Parameters.Add("@razaoSocial", SqlDbType.VarChar).Value = this.RazaoSocial ?? "";
+                        comando.Parameters.Add("@numDocumento", SqlDbType.VarChar).Value = this.NumDocumento ?? "";
                         comando.Parameters.Add("@tipoPessoa", SqlDbType.Int).Value = this.TipoPessoa;
-                        comando.Parameters.Add("@telefone", SqlDbType.VarChar).Value = this.Telefone;
-                        comando.Parameters.Add("@contato", SqlDbType.VarChar).Value = this.Contato;
-                        comando.Parameters.Add("@endereco", SqlDbType.VarChar).Value = this.Endereco;
+                        comando.Parameters.Add("@telefone", SqlDbType.VarChar).Value = this.Telefone ?? "";
+                        comando.Parameters.Add("@contato", SqlDbType.VarChar).Value = this.Contato ?? "";
+                        comando.Parameters.Add("@endereco", SqlDbType.VarChar).Value = this.Endereco ?? "";
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0);
 
                         retorno = (int)comando.ExecuteScalar();
@@ -176,24 +174,24 @@ namespace ControleEstoque.Web.Models
                         comando.CommandText = "UPDATE fornecedor " +
                                               "SET " +
                                                     "nome = @nome, " +
-                                                    "razaoSosial = @razaoSocial " +
-                                                    "numDocumento = @numDocumento " +
-                                                    "tipoPessoa = @tipoPessoa " +
-                                                    "telefone = @telefone " +
-                                                    "contato = @contato " +
-                                                    "endereco = @endereco " +
+                                                    "razaoSocial = @razaoSocial, " +
+                                                    "numDocumento = @numDocumento, " +
+                                                    "tipoPessoa = @tipoPessoa, " +
+                                                    "telefone = @telefone, " +
+                                                    "contato = @contato, " +
+                                                    "endereco = @endereco, " +
                                                     "ativo = @ativo " +
                                               "WHERE " +
                                                     "id = @id;";
 
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@razaoSocial", SqlDbType.VarChar).Value = this.RazaoSocial;
-                        comando.Parameters.Add("@numDocumento", SqlDbType.VarChar).Value = this.NumDocumento;
+                        comando.Parameters.Add("@razaoSocial", SqlDbType.VarChar).Value = this.RazaoSocial ?? "";
+                        comando.Parameters.Add("@numDocumento", SqlDbType.VarChar).Value = this.NumDocumento ?? "";
                         comando.Parameters.Add("@tipoPessoa", SqlDbType.Int).Value = this.TipoPessoa;
-                        comando.Parameters.Add("@telefone", SqlDbType.VarChar).Value = this.Telefone;
-                        comando.Parameters.Add("@contato", SqlDbType.VarChar).Value = this.Contato;
-                        comando.Parameters.Add("@endereco", SqlDbType.VarChar).Value = this.Endereco;
+                        comando.Parameters.Add("@telefone", SqlDbType.VarChar).Value = this.Telefone ?? "";
+                        comando.Parameters.Add("@contato", SqlDbType.VarChar).Value = this.Contato ?? "";
+                        comando.Parameters.Add("@endereco", SqlDbType.VarChar).Value = this.Endereco ?? "";
                         comando.Parameters.Add("@ativo", SqlDbType.Bit).Value = (this.Ativo ? 1 : 0);
                         if (comando.ExecuteNonQuery() > 0) retorno = this.Id;
                     }
