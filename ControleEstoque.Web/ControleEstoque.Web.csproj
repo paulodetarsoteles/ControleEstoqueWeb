@@ -137,6 +137,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CriptoHelper.cs" />
+    <Compile Include="Models\AlterarSenhaViewModel.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\FornecedorModel.cs" />
     <Compile Include="Models\GrupoProdutoModel.cs" />
@@ -225,6 +226,7 @@
     <Content Include="Views\CadastroMarcaProduto\Index.cshtml" />
     <Content Include="Views\CadastroProduto\Index.cshtml" />
     <Content Include="Views\CadastroGrupoProduto\RecuperarGrupoProduto.cshtml" />
+    <Content Include="Views\Conta\AlterarSenha.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -8,6 +8,7 @@ namespace ControleEstoque.Web.Controllers
 {
     public class ContaController : Controller
     {
+        [HttpGet]
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -31,7 +32,8 @@ namespace ControleEstoque.Web.Controllers
                         usuario.Nome,
                         DateTime.Now,
                         DateTime.Now.AddHours(12),
-                        login.Esqueci,
+                        login.Esqueci, 
+                        usuario.Id + "|", 
                         usuario.RecuperarStringNomePerfis()
                         )
                     );
@@ -52,6 +54,21 @@ namespace ControleEstoque.Web.Controllers
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AlterarSenha(AlterarSenhaViewModel model)
+        {
+            if (HttpContext.Request.HttpMethod.ToUpper() == "POST")
+            {
+
+                return View(model);
+            }
+            else
+            {
+                ModelState.Clear(); 
+                return View();
+            }
         }
     }
 }

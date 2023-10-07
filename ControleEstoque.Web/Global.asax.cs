@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
@@ -10,7 +8,7 @@ using System.Web.Security;
 
 namespace ControleEstoque.Web
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         protected void Application_Start()
         {
@@ -22,23 +20,23 @@ namespace ControleEstoque.Web
 
         void Application_Error(object sender, EventArgs e)
         {
-            Exception ex = Server.GetLastError(); 
+            Exception ex = Server.GetLastError();
 
-            if(ex is HttpRequestValidationException)
+            if (ex is HttpRequestValidationException)
             {
                 Response.Clear();
-                Response.StatusCode = 200; 
+                Response.StatusCode = 200;
                 Response.ContentType = "application/json";
-                Response.Write("{\"Resultado\":\"AVISO\",\"Mensagens\":[\"Não são permitidos caracteres especiais!\"],\"IdSalvo\":\"\"}"); 
+                Response.Write("{\"Resultado\":\"AVISO\",\"Mensagens\":[\"Não são permitidos caracteres especiais!\"],\"IdSalvo\":\"\"}");
                 Response.End();
             }
         }
 
         protected void Application_AuthenticateRequest(Object sender, EventArgs e)
         {
-            HttpCookie cookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName]; 
+            HttpCookie cookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName];
 
-            if(cookie != null && cookie.Value != string.Empty)
+            if (cookie != null && cookie.Value != string.Empty)
             {
                 FormsAuthenticationTicket ticket;
                 try
@@ -47,13 +45,16 @@ namespace ControleEstoque.Web
                 }
                 catch (Exception)
                 {
-                    return; 
+                    return;
                 }
-                string[] perfis = ticket.UserData.Split(';'); 
 
-                if(Context.User != null)
+                string[] partes = ticket.UserData.Split('|');
+                int id = Convert.ToInt32(partes[0]); 
+                string[] perfis = ticket.UserData.Split(';');
+
+                if (Context.User != null)
                 {
-                    Context.User = new GenericPrincipal(Context.User.Identity, perfis); 
+                    Context.User = new GenericPrincipal(Context.User.Identity, perfis);
                 }
             }
         }

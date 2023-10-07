@@ -252,6 +252,28 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
+        public bool AlterarSenha(string novaSenha)
+        {
+            bool ret = false; 
+
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString; 
+                conexao.Open(); 
+
+                using (var comando = new SqlCommand())
+                {
+                    comando.Connection = conexao;
+                    comando.CommandText = "update usuario set senha = @senha where id = @id; ";
+                    comando.Parameters.Add("id", SqlDbType.Int).Value = this.Id; 
+                    comando.Parameters.Add("senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(novaSenha); 
+
+                    ret = comando.ExecuteNonQuery() > 0;
+                }
+            }
+            return ret; 
+        }
+
         #endregion
     }
 }
