@@ -26,7 +26,7 @@ O curso é é relativamente longo pois a intenção do professor é muitas vezes
 
 - ORM: EntityFrameWork e Dapper
 
-- Criptografias: MD5 e depois Identity
+- Autenticação: Criptografia MD5 e depois Identity
 
 - Banco de Dados: SQL Server
 
