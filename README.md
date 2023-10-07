@@ -14,17 +14,21 @@ O curso é é relativamente longo pois a intenção do professor é muitas vezes
 
 ### Tecnologias Utilizadas
 
-BackEnd: C#; 
+- Ambiente: .Net Framework 4.5.2
 
-FrontEnd: HTML, CSS, JavaScript, Razor, Ajax e JQuery
+- BackEnd: C#
 
-Acesso a dados inicial com ADO.Net
+- Framework: ASP.Net MVC
 
-ORM: EntityFrameWork e Dapper
+- FrontEnd: HTML, CSS, JavaScript, Razor, Ajax e JQuery
 
-Criptografias: MD5 e depois Identity
+- Acesso a dados inicial com ADO.Net
 
-Banco de Dados: SQL Server
+- ORM: EntityFrameWork e Dapper
+
+- Criptografias: MD5 e depois Identity
+
+- Banco de Dados: SQL Server
 
 ### Para a execução
 
